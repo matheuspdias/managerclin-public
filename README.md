@@ -12,7 +12,7 @@
 
 **Sistema moderno e completo para gestão de clínicas médicas com agendamento inteligente, prontuários digitais, controle financeiro e muito mais.**
 
-[🚀 Instalação](INSTALLATION.md) • [🐛 Reportar Bug](https://github.com/yourusername/managerclin/issues)
+[🚀 Instalação](INSTALLATION.md) • [🐛 Reportar Bug](https://github.com/matheuspdias/managerclin-public/issues)
 
 </div>
 
@@ -147,8 +147,8 @@ Chatbot inteligente para auxiliar nas tarefas do dia a dia.
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/yourusername/managerclin.git
-cd managerclin
+git clone https://github.com/matheuspdias/managerclin-public.git
+cd managerclin-public
 
 # 2. Configure o ambiente
 cp .env.example .env
@@ -224,7 +224,7 @@ Este projeto é proprietário e confidencial. Todos os direitos reservados.
 
 - 📧 Email: suporte@managerclin.com.br
 - 💬 Discord: [Servidor da Comunidade](#)
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/managerclin/issues)
+- 🐛 Issues: [GitHub Issues](https://github.com/matheuspdias/managerclin-public/issues)
 
 ---
 
@@ -232,7 +232,7 @@ Este projeto é proprietário e confidencial. Todos os direitos reservados.
 
 **Desenvolvido com ❤️ para modernizar a gestão de clínicas médicas**
 
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/managerclin?style=social)](https://github.com/yourusername/managerclin)
-[![GitHub forks](https://img.shields.io/github/forks/yourusername/managerclin?style=social)](https://github.com/yourusername/managerclin/fork)
+[![GitHub stars](https://img.shields.io/github/stars/matheuspdias/managerclin-public?style=social)](https://github.com/matheuspdias/managerclin-public)
+[![GitHub forks](https://img.shields.io/github/forks/matheuspdias/managerclin-public?style=social)](https://github.com/matheuspdias/managerclin-public/fork)
 
 </div>

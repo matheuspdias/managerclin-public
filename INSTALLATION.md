@@ -26,8 +26,8 @@ Este guia contém instruções detalhadas para instalar e configurar o ManagerCl
 ### 1. Clone o Repositório
 
 ```bash
-git clone https://github.com/yourusername/managerclin.git
-cd managerclin
+git clone https://github.com/matheuspdias/managerclin-public.git
+cd managerclin-public
 ```
 
 ### 2. Configure as Variáveis de Ambiente
@@ -201,8 +201,8 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 ```bash
 # Clone o repositório
-git clone https://github.com/yourusername/managerclin.git
-cd managerclin
+git clone https://github.com/matheuspdias/managerclin-public.git
+cd managerclin-public
 
 # Configure o ambiente
 cp .env.example .env.production
@@ -583,7 +583,7 @@ Se encontrar problemas durante a instalação:
 
 1. Verifique os logs: `docker-compose logs -f`
 2. Consulte a seção de [Solução de Problemas](#-solução-de-problemas)
-3. Abra uma issue: [GitHub Issues](https://github.com/yourusername/managerclin/issues)
+3. Abra uma issue: [GitHub Issues](https://github.com/matheuspdias/managerclin-public/issues)
 4. Entre em contato: suporte@managerclin.com.br
 
 ---
