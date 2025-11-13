@@ -121,32 +121,29 @@ docker-compose exec app php artisan db:seed
 docker-compose exec app php artisan storage:link
 ```
 
-### 8. Inicie o Ambiente de Desenvolvimento
+### 8. Inicie os Serviços de Desenvolvimento
 
-Você tem duas opções:
+Com os containers rodando (`docker-compose up -d`), você precisa iniciar os workers e o Vite.
 
-#### Opção A: Comando único (recomendado)
+Execute os seguintes comandos em terminais separados:
+
 ```bash
-composer dev
-```
-
-Este comando inicia automaticamente:
-- Laravel development server (http://localhost:8000)
-- Queue worker
-- Vite dev server com HMR
-- Logs em tempo real
-
-#### Opção B: Comandos individuais
-```bash
-# Terminal 1 - Laravel
-docker-compose exec app php artisan serve
-
-# Terminal 2 - Queue Worker
+# Terminal 1 - Queue Worker (processa jobs: emails, notificações, etc)
 docker-compose exec app php artisan queue:work
 
-# Terminal 3 - Vite (Frontend)
+# Terminal 2 - Scheduler (executa tarefas agendadas: lembretes WhatsApp, etc)
+docker-compose exec app php artisan schedule:work
+
+# Terminal 3 - Vite (Frontend com Hot Module Replacement)
 docker-compose exec node npm run dev
 ```
+
+**O que cada comando faz:**
+- **`queue:work`** - Processa jobs da fila (envio de emails, notificações assíncronas)
+- **`schedule:work`** - Executa tarefas agendadas a cada minuto (lembretes de consultas, relatórios automáticos)
+- **`npm run dev`** - Build do frontend com hot reload
+
+**Nota:** O servidor web já está rodando via Docker (Nginx/Apache), então não é necessário rodar `php artisan serve`.
 
 ### 9. Acesse a Aplicação
 

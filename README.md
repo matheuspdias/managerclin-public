@@ -1,7 +1,5 @@
 <div align="center">
 
-![ManagerClin Logo](public/images/logo.png)
-
 # 🏥 ManagerClin
 
 ### Sistema Completo de Gestão para Clínicas Médicas
@@ -14,7 +12,7 @@
 
 **Sistema moderno e completo para gestão de clínicas médicas com agendamento inteligente, prontuários digitais, controle financeiro e muito mais.**
 
-[🚀 Instalação](INSTALLATION.md) • [📖 Documentação](CLAUDE.md) • [🐛 Reportar Bug](https://github.com/yourusername/managerclin/issues)
+[🚀 Instalação](INSTALLATION.md) • [🐛 Reportar Bug](https://github.com/yourusername/managerclin/issues)
 
 </div>
 
@@ -37,11 +35,6 @@ Sistema completo de agendamento com calendário interativo, gestão de salas, se
 Visão geral completa da clínica com métricas em tempo real.
 
 ![Dashboard Principal](public/images/dashboard.png)
-
-#### Dashboard Médico
-Interface especializada para profissionais de saúde.
-
-![Dashboard Médico](public/images/medico_dashboard.png)
 
 #### Dashboard Financeiro
 Controle total das finanças da clínica.
