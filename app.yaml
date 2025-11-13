@@ -1,0 +1,46 @@
+name: clinica-agenda
+services:
+- name: web
+  source_dir: /
+  github:
+    repo: seu-usuario/clinica-agenda
+    branch: main
+  dockerfile_path: Dockerfile.prod
+  instance_count: 2
+  instance_size_slug: basic-xs
+  routes:
+  - path: /
+  http_port: 80
+  health_check:
+    http_path: /health
+    timeout_seconds: 10
+    initial_delay_seconds: 30
+  envs:
+  - key: APP_ENV
+    value: production
+  - key: APP_DEBUG
+    value: false
+  - key: APP_URL
+    value: https://clinica-agenda.ondigitalocean.app
+  - key: LOG_CHANNEL
+    value: stderr
+  - key: TRUST_PROXIES
+    value: "*"
+
+databases:
+- engine: MYSQL
+  name: clinica-db
+  version: "8"
+  size_slug: db-s-1vcpu-1gb
+  num_nodes: 1
+  eviction_policy: noeviction
+
+# Configurações de rede e SSL
+ingress:
+  rules:
+  - component: web
+    match:
+      path:
+        prefix: /
+  tls:
+    certificate_id: ${CLINICA_SSL_CERT}

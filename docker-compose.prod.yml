@@ -1,0 +1,54 @@
+services:
+  laravel_app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      target: production
+      args:
+        VITE_STRIPE_KEY: ${VITE_STRIPE_KEY}
+    container_name: laravel_app
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    env_file: .env
+    environment:
+      - APP_ENV=production
+    volumes:
+      - app_storage:/var/www/html/storage
+      - ./.env:/var/www/html/.env
+      - ./docker/certbot/conf:/etc/letsencrypt
+      - ./docker/certbot/www:/var/www/certbot
+      # CloudFlare Origin Certificate mapping
+      - ./docker/certbot/conf/live/managerclin.com.br:/etc/ssl/cloudflare:ro
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      target: production
+      args:
+        VITE_STRIPE_KEY: ${VITE_STRIPE_KEY}
+    container_name: laravel_worker
+    restart: unless-stopped
+    command: php artisan queue:work --sleep=3 --tries=3 --timeout=60
+    env_file: .env
+    environment:
+      - APP_ENV=production
+    volumes:
+      - app_storage:/var/www/html/storage
+      - ./.env:/var/www/html/.env
+    depends_on:
+      - laravel_app
+
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./docker/certbot/conf:/etc/letsencrypt
+      - ./docker/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait; done;'"
+
+volumes:
+  app_storage:
+    driver: local

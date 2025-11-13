@@ -1,0 +1,11 @@
+.git
+.gitignore
+docker-compose.yml
+Dockerfile
+Dockerfile.node
+.env
+.env.example
+node_modules
+vendor
+storage/logs/*.log
+*.md

@@ -1,0 +1,250 @@
+name: Deploy Laravel + Inertia (Production)
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+' # Aceita tags como 1.0.0, 1.2.3, 2.0.0
+
+jobs:
+  deploy-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Deploy via Docker Compose
+        run: |
+          # Criar script de deploy localmente para evitar problemas de escapamento
+          cat > deploy.sh << 'SCRIPT_EOF'
+          #!/bin/bash
+          set -e
+
+          # Garantir diretório de deploy
+          sudo mkdir -p /home/deploy
+          cd /home/deploy
+
+          # Clone seguro ou pull se já existir
+          if [ ! -d 'clinica-app/.git' ]; then
+            # Remover diretório antigo e clonar novo
+            sudo rm -rf clinica-app
+            sudo ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>/dev/null || true
+            sudo git clone git@github.com:${{ github.repository }}.git clinica-app
+            sudo chown -R $(whoami):$(whoami) clinica-app
+          fi
+
+          cd clinica-app
+
+          # Fetch todas as branches e tags
+          git fetch --all --tags --force
+          git reset --hard origin/master
+
+          # Checkout para a tag específica que acionou o deploy
+          git checkout tags/$TAG_NAME
+
+          # Verificar se o arquivo .env existe
+          if [ ! -f '.env' ]; then
+            echo 'ERRO: Arquivo .env não encontrado!'
+            echo 'Certifique-se de que o arquivo .env existe em /home/deploy/clinica-app/'
+            exit 1
+          fi
+
+          echo 'Arquivo .env encontrado. Verificando configurações...'
+
+          # Verificar se as variáveis SSL estão configuradas no .env
+          if ! grep -q '^DOMAIN=' .env || ! grep -q '^EMAIL=' .env; then
+            echo 'ATENÇÃO: Variáveis DOMAIN e EMAIL devem estar configuradas no .env'
+            echo 'Verifique o arquivo .env no servidor'
+          fi
+
+          # Login no Docker Hub para evitar rate limiting
+          echo 'Fazendo login no Docker Hub...'
+          printf '%s' "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin >/dev/null 2>&1
+
+          # Build da imagem primeiro
+          echo 'Buildando imagem...'
+          docker compose -f docker-compose.prod.yml build --no-cache
+
+          # Verificar se certificados SSL existem e são válidos (APENAS certificados reais)
+          CERT_VALID=false
+          CERT_TYPE="unknown"
+
+          # Extrair domínio do .env primeiro
+          DOMAIN_CHECK=$(grep '^DOMAIN=' .env | head -1 | cut -d'=' -f2- | sed 's|https*://||' | sed 's|:[0-9]*||' | tr -d ' \n\r"' | sed 's|/.*||')
+
+          echo "Verificando certificados SSL para domínio: [$DOMAIN_CHECK]"
+
+          if [ -d 'docker/certbot/conf/live' ] && [ -n "$(ls -A docker/certbot/conf/live 2>/dev/null || echo '')" ]; then
+            echo 'Verificando certificados SSL existentes...'
+
+            # Verificar se certificado para o domínio existe
+            if [ -f "docker/certbot/conf/live/$DOMAIN_CHECK/fullchain.pem" ]; then
+              echo "Certificado encontrado para $DOMAIN_CHECK"
+
+              # Extrair informações do certificado
+              CERT_CN=$(openssl x509 -noout -subject -in "docker/certbot/conf/live/$DOMAIN_CHECK/fullchain.pem" 2>/dev/null | grep -o 'CN=[^,]*' | cut -d'=' -f2 | tr -d ' ')
+              CERT_ISSUER=$(openssl x509 -noout -issuer -in "docker/certbot/conf/live/$DOMAIN_CHECK/fullchain.pem" 2>/dev/null)
+
+              echo "CN do certificado: [$CERT_CN]"
+              echo "Emissor: [$CERT_ISSUER]"
+
+              # APENAS certificados CloudFlare Origin são aceitos (modo strict)
+              if echo "$CERT_ISSUER" | grep -iq "cloudflare"; then
+                echo "✅ Certificado CloudFlare Origin detectado! (Modo Strict/Full)"
+                CERT_TYPE="cloudflare"
+                CERT_VALID=true
+              else
+                echo "❌ Certificado não é CloudFlare Origin. Sistema funciona APENAS em modo Full/Strict."
+                echo "Por favor, configure o certificado Origin do CloudFlare no servidor."
+                CERT_VALID=false
+              fi
+
+              echo "Tipo de certificado: $CERT_TYPE"
+              echo "Certificado válido para deploy: $CERT_VALID"
+            else
+              echo "❌ Certificado não encontrado para o domínio $DOMAIN_CHECK."
+              echo "Sistema requer certificado CloudFlare Origin para funcionar em modo Full/Strict."
+              CERT_VALID=false
+            fi
+          else
+            echo "❌ Diretório de certificados não existe."
+            echo "Sistema requer certificado CloudFlare Origin para funcionar em modo Full/Strict."
+            CERT_VALID=false
+          fi
+
+          if [ "$CERT_VALID" = "true" ]; then
+            echo "Certificado SSL válido encontrado ($CERT_TYPE). Iniciando deploy..."
+
+            # Aplicar configuração atualizada do nginx (substituir variável do domínio)
+            echo 'Aplicando configuração atualizada do nginx...'
+            sed -i "s/\${DOMAIN}/$DOMAIN_CHECK/g" docker/nginx/conf.d/prod.conf
+
+            # Subir containers - o start.sh fará o resto
+            echo 'Subindo containers...'
+            docker compose -f docker-compose.prod.yml up -d --force-recreate
+
+            # Aguardar inicialização completa
+            echo 'Aguardando containers iniciarem completamente...'
+            sleep 30
+
+          else
+            echo "❌ ERRO CRÍTICO: Certificado CloudFlare Origin não encontrado ou inválido!"
+            echo ""
+            echo "🔒 Este sistema funciona APENAS em modo Full/Strict SSL do CloudFlare."
+            echo "📋 Para corrigir este erro:"
+            echo ""
+            echo "1. Acesse o painel do CloudFlare"
+            echo "2. Vá em SSL/TLS > Origin Server"
+            echo "3. Crie um certificado Origin"
+            echo "4. Salve o certificado como:"
+            echo "   - fullchain.pem: /home/deploy/clinica-app/docker/certbot/conf/live/$DOMAIN_CHECK/"
+            echo "   - privkey.pem: /home/deploy/clinica-app/docker/certbot/conf/live/$DOMAIN_CHECK/"
+            echo ""
+            echo "5. Configure CloudFlare SSL mode para 'Full (strict)'"
+            echo ""
+            echo "❗ Deploy CANCELADO - Certificado CloudFlare Origin obrigatório"
+
+            exit 1
+          fi
+
+          echo 'Aguardando containers iniciarem...'
+          sleep 30
+
+          echo 'Verificando status dos containers...'
+          docker compose -f docker-compose.prod.yml ps
+
+          echo 'Verificando logs de inicialização (sem dados sensíveis)...'
+          docker compose -f docker-compose.prod.yml logs --tail=50 laravel_app 2>&1 | \
+          grep -v -E '(STRIPE|AWS|DB_PASSWORD|API_KEY|SECRET|TOKEN|KEY)' | head -20
+
+          echo 'Verificando se aplicação está respondendo...'
+          # Health check seguro sem acessar .env diretamente
+          docker compose -f docker-compose.prod.yml exec -T laravel_app bash -c '
+            for i in {1..12}; do
+              # Testar HTTPS primeiro
+              if curl -f -k -X GET https://localhost/ 2>/dev/null >/dev/null; then
+                echo "✅ Aplicação respondendo via HTTPS!"
+                break
+              fi
+
+              # Fallback para HTTP
+              if curl -f -X GET http://localhost/ 2>/dev/null >/dev/null; then
+                echo "✅ Aplicação respondendo via HTTP!"
+                break
+              fi
+
+              echo "⏳ Tentativa $i/12 - Aguardando aplicação..."
+              sleep 5
+            done
+
+            # Verificação adicional sem expor dados
+            php artisan inspire >/dev/null 2>&1 && echo "🚀 Laravel funcionando!" || echo "❌ Laravel com problemas"
+          '
+
+          echo 'Reiniciando worker para garantir que está com a versão mais recente...'
+          docker compose -f docker-compose.prod.yml restart worker
+
+          echo 'Configurando Laravel Scheduler no cron...'
+          CRON_JOB='* * * * * cd /home/deploy/clinica-app && docker compose exec -T laravel_app php artisan schedule:run >> /var/log/laravel-scheduler.log 2>&1'
+
+          # Verificar se o cron job já existe
+          if crontab -l 2>/dev/null | grep -q 'schedule:run'; then
+            echo 'Cron job já configurado, pulando...'
+          else
+            echo 'Adicionando cron job para Laravel Scheduler...'
+            # Backup do crontab atual e adicionar nova linha
+            (crontab -l 2>/dev/null || echo '') | grep -v 'schedule:run' > ~/crontab_backup
+            echo "$CRON_JOB" >> ~/crontab_backup
+            crontab ~/crontab_backup
+            rm ~/crontab_backup
+            echo 'Cron job configurado com sucesso!'
+          fi
+
+          echo 'Verificando crontab atual:'
+          crontab -l | grep -E '(schedule:run|#.*Laravel)'
+
+          echo 'Deploy concluído com sucesso!'
+          SCRIPT_EOF
+
+          # Copiar script para o servidor (usando home do usuário ao invés de /tmp)
+          scp -o StrictHostKeyChecking=no deploy.sh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:~/deploy.sh
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "
+            chmod +x ~/deploy.sh
+            TAG_NAME='${{ github.ref_name }}' \
+            DOCKER_USERNAME='${{ secrets.DOCKERHUB_USERNAME }}' \
+            DOCKER_PASSWORD='${{ secrets.DOCKERHUB_TOKEN }}' \
+            ~/deploy.sh
+            rm -f ~/deploy.sh
+          "
+
+      - name: Notificar Discord
+        uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          status: ${{ job.status }}
+          title: Deploy Production
+          description: |
+            ✅ Deploy da versão ${{ github.ref_name }} finalizado!
+            - Commit: ${{ github.sha }}
+            - Autor: ${{ github.actor }}
+            - Ambiente: Production
+            - SSL/HTTPS: Configurado 🔒 (CloudFlare Origin)
+            - WhatsApp Scheduler: Configurado ✅
+            - Release: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+          color: 0x00ff00
+          username: Deploy Bot
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
