@@ -1,317 +1,245 @@
-# 🏥 Clínica Agenda - Sistema de Agendamento Médico
+<div align="center">
 
-Sistema completo de agendamento para clínicas médicas com notificações WhatsApp automáticas, construído com Laravel 12, React 19 e Inertia.js.
+![ManagerClin Logo](public/images/logo.png)
 
-## ✨ Funcionalidades
+# 🏥 ManagerClin
 
-- 📅 **Agendamento de Consultas** - Sistema completo de scheduling
-- 👥 **Multi-tenant** - Isolamento por empresa/clínica
-- 📱 **Notificações WhatsApp** - Lembretes automáticos via Evolution API
-- 💳 **Integração Stripe** - Pagamentos e assinaturas
-- 🔐 **Autenticação Multi-role** - Diferentes níveis de acesso
-- 📋 **Prontuários Digitais** - Registro médico completo
-- 📄 **Atestados Médicos** - Geração de PDFs com QR Code
-- 🤖 **Chat IA** - Assistente integrado
-- 🌙 **Dark Mode** - Interface adaptável
+### Sistema Completo de Gestão para Clínicas Médicas
 
-## 🛠️ Tech Stack
+[![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Inertia.js](https://img.shields.io/badge/Inertia.js-2-9553E9?style=for-the-badge&logo=inertia&logoColor=white)](https://inertiajs.com)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+
+**Sistema moderno e completo para gestão de clínicas médicas com agendamento inteligente, prontuários digitais, controle financeiro e muito mais.**
+
+[🚀 Instalação](INSTALLATION.md) • [📖 Documentação](CLAUDE.md) • [🐛 Reportar Bug](https://github.com/yourusername/managerclin/issues)
+
+</div>
+
+---
+
+## ✨ Principais Funcionalidades
+
+### 📅 **Agendamento Inteligente**
+Sistema completo de agendamento com calendário interativo, gestão de salas, serviços e profissionais.
+
+![Agenda](public/images/agenda.png)
+
+![Agendamentos](public/images/agendamentos.png)
+
+---
+
+### 📊 **Dashboards Poderosos**
+
+#### Dashboard Principal
+Visão geral completa da clínica com métricas em tempo real.
+
+![Dashboard Principal](public/images/dashboard.png)
+
+#### Dashboard Médico
+Interface especializada para profissionais de saúde.
+
+![Dashboard Médico](public/images/medico_dashboard.png)
+
+#### Dashboard Financeiro
+Controle total das finanças da clínica.
+
+![Dashboard Financeiro](public/images/dashboard_financeiro.png)
+
+#### Dashboard de Estoque
+Gestão inteligente de estoque e materiais.
+
+![Dashboard Estoque](public/images/dashboard_estoque.png)
+
+---
+
+### 📋 **Prontuários Digitais**
+Sistema completo de prontuário eletrônico com histórico, anexos e geração de atestados.
+
+![Prontuário](public/images/prontuario.png)
+
+---
+
+### 🤖 **Assistente IA Integrado**
+Chatbot inteligente para auxiliar nas tarefas do dia a dia.
+
+<div align="center">
+  <img src="public/images/chatbot1.png" width="48%" />
+  <img src="public/images/chatbot2.png" width="48%" />
+</div>
+
+---
+
+## 🎯 Recursos Principais
+
+<table>
+<tr>
+<td width="50%">
+
+### 🏥 Gestão Clínica
+- ✅ Agendamento de consultas
+- ✅ Gestão de pacientes
+- ✅ Prontuários eletrônicos
+- ✅ Atestados médicos com QR Code
+- ✅ Controle de salas e equipamentos
+- ✅ Gestão de serviços e procedimentos
+
+</td>
+<td width="50%">
+
+### 💼 Gestão Administrativa
+- ✅ Dashboard com métricas em tempo real
+- ✅ Controle financeiro completo
+- ✅ Gestão de estoque
+- ✅ Sistema multi-tenant (multi-clínicas)
+- ✅ Diferentes níveis de acesso
+- ✅ Relatórios e análises
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 📱 Comunicação
+- ✅ Notificações WhatsApp automáticas
+- ✅ Lembretes de consultas
+- ✅ E-mails transacionais
+- ✅ Chat IA integrado
+
+</td>
+<td width="50%">
+
+### 💳 Pagamentos
+- ✅ Integração com Stripe
+- ✅ Assinaturas mensais/anuais
+- ✅ Sistema de créditos IA
+- ✅ Webhook automático
+- ✅ Múltiplos planos
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🛠️ Tecnologias
 
 ### Backend
-
-- **Laravel 12** com PHP 8.3+
-- **MySQL** - Banco de dados principal
+- **Laravel 12** - Framework PHP moderno
+- **MySQL** - Banco de dados relacional
 - **Redis** - Cache e filas
-- **Evolution API** - WhatsApp integration
+- **Evolution API** - Integração WhatsApp
 
 ### Frontend
-
-- **React 19** com TypeScript
+- **React 19** - Interface reativa
+- **TypeScript** - Type safety
 - **Inertia.js** - Full-stack framework
-- **Tailwind CSS v4** - Styling
-- **Radix UI** - Component library
-- **Vite** - Build tool
+- **Tailwind CSS v4** - Styling utility-first
+- **Radix UI** - Componentes acessíveis
+- **FullCalendar** - Calendário interativo
 
 ### DevOps
-
 - **Docker** - Containerização
 - **GitHub Actions** - CI/CD
 - **Nginx** - Web server
 - **Supervisor** - Process management
 
-## 🚀 Quick Start (Desenvolvimento)
+---
 
-### Pré-requisitos
+## 🚀 Como Começar
 
-- Docker e Docker Compose
-- Git
-
-### 1. Clone e Setup
+### Desenvolvimento Local
 
 ```bash
-git clone https://github.com/matheuspdias/inertiajs-clinica-agenda.git
-cd inertiajs-clinica-agenda
+# 1. Clone o repositório
+git clone https://github.com/yourusername/managerclin.git
+cd managerclin
+
+# 2. Configure o ambiente
 cp .env.example .env
-```
 
-### 2. Iniciar Containers
-
-```bash
+# 3. Inicie os containers
 docker-compose up -d
-```
 
-### 3. Instalar Dependências
-
-```bash
-# PHP dependencies
+# 4. Instale as dependências
 docker-compose exec app composer install
-
-# Node dependencies
 docker-compose exec node npm install
-```
 
-### 4. Database Setup
+# 5. Configure o banco de dados
+docker-compose exec app php artisan migrate --seed
 
-```bash
-# Run migrations
-docker-compose exec app php artisan migrate
-
-# Seed database
-docker-compose exec app php artisan db:seed
-```
-
-### 5. Desenvolvimento
-
-```bash
-# Start development stack (Laravel + Queue + Vite)
+# 6. Inicie o desenvolvimento
 composer dev
-
-# Or individual services
-docker-compose exec app php artisan serve
-docker-compose exec app php artisan queue:work
-docker-compose exec node npm run dev
 ```
 
-## 📱 WhatsApp Notifications
+📖 **Para instruções detalhadas, consulte o [Guia de Instalação](INSTALLATION.md)**
 
-O sistema possui notificações automáticas configuradas para rodar a cada 5 minutos:
+---
 
-### Funcionalidades
+## 📐 Arquitetura
 
-- ✅ Lembrete 1 dia antes da consulta
-- ✅ Lembrete 3 horas antes da consulta
-- ✅ Normalização automática de telefones brasileiros
-- ✅ Suporte apenas para planos Pro/Premium e trial
+### Multi-tenant
+Sistema isolado por empresa/clínica com dados completamente segregados.
 
-### Configuração
+### Padrões de Projeto
+- **Repository Pattern** - Camada de abstração de dados
+- **Service Layer** - Lógica de negócio
+- **Resources** - Transformação de dados
+- **Traits** - Reutilização de código
 
-As notificações são automaticamente configuradas no deploy. Veja [WHATSAPP_SCHEDULER.md](WHATSAPP_SCHEDULER.md) para detalhes.
+### Segurança
+- ✅ Autenticação multi-nível
+- ✅ Autorização por roles
+- ✅ Proteção CSRF
+- ✅ Sanitização de inputs
+- ✅ Rate limiting
+- ✅ Auditoria de ações
 
-## 🚀 Deploy em Produção
+---
 
-### Automático via GitHub Actions
+## 📊 Planos e Preços
 
-```bash
-# Criar tag e fazer push
-git tag 1.0.0
-git push origin 1.0.0
-```
+| Plano | Recursos | Preço |
+|-------|----------|-------|
+| **Free** | Funcionalidades básicas | Grátis |
+| **Pro** | + WhatsApp + IA (50 créditos) | R$ 97/mês |
+| **Premium** | + Ilimitado + Suporte prioritário | R$ 197/mês |
 
-O workflow automaticamente:
+---
 
-- ✅ Faz build das imagens Docker
-- ✅ Deploy no servidor
-- ✅ **Configura WhatsApp Scheduler**
-- ✅ Verifica funcionamento
-- ✅ Notifica via Discord
+## 🤝 Contribuindo
 
-Veja [DEPLOY.md](DEPLOY.md) para detalhes completos.
-
-## 🔧 Comandos de Desenvolvimento
-
-### Laravel
-
-```bash
-# Migrations
-docker-compose exec app php artisan migrate
-docker-compose exec app php artisan migrate:fresh --seed
-
-# Cache
-docker-compose exec app php artisan config:cache
-docker-compose exec app php artisan route:cache
-docker-compose exec app php artisan view:cache
-
-# Queue
-docker-compose exec app php artisan queue:work
-docker-compose exec app php artisan queue:restart
-```
-
-### Frontend
-
-```bash
-# Development
-docker-compose exec node npm run dev
-
-# Build
-docker-compose exec node npm run build
-
-# Lint & Format
-npm run lint
-npm run format
-npm run types
-```
-
-### Testing
-
-```bash
-# PHP Tests
-composer test
-
-# Type checking
-npm run types
-```
-
-## 📊 Monitoramento (Produção)
-
-### Status dos Containers
-
-```bash
-docker compose -f docker-compose.prod.yml ps
-```
-
-### Logs
-
-```bash
-# Aplicação
-docker compose -f docker-compose.prod.yml logs -f laravel_app
-
-# Laravel Logs
-docker compose -f docker-compose.prod.yml exec laravel_app tail -f storage/logs/laravel.log
-
-# Worker
-docker compose -f docker-compose.prod.yml logs -f worker
-
-# WhatsApp Scheduler
-tail -f /var/log/laravel-scheduler.log
-```
-
-### WhatsApp Debug
-
-```bash
-# Logs WhatsApp
-docker compose -f docker-compose.prod.yml exec laravel_app tail -f storage/logs/laravel.log | grep WhatsApp
-```
-
-## 🔑 Variáveis de Ambiente
-
-### Essenciais
-
-```env
-APP_ENV=production
-APP_KEY=base64:...
-APP_URL=https://yourdomain.com
-
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_DATABASE=clinica_agenda
-DB_USERNAME=root
-DB_PASSWORD=secret
-
-EVOLUTION_API_KEY=your-evolution-api-key
-WHATSAPP_API_URL=https://your-evolution-api.com
-
-STRIPE_KEY=chave_publica
-STRIPE_SECRET=chave_secret
-```
-
-## 🛠️ Solução de Problemas
-
-### Containers não sobem
-
-```bash
-# Rebuild forçado
-docker-compose build --no-cache
-docker-compose up -d --force-recreate
-```
-
-### WhatsApp não funciona
-
-```bash
-# Verificar instância
-docker-compose exec app php artisan tinker
->>> app(\App\Services\Whatsapp\WhatsappService::class)->getConfig(1);
-
-# Verificar cron
-crontab -l | grep schedule:run
-```
-
-### Performance Issues
-
-```bash
-# Limpar cache
-docker-compose exec app php artisan optimize:clear
-
-# Otimizar para produção
-docker-compose exec app php artisan optimize
-```
-
-### Limpeza de Espaço
-
-```bash
-# Docker cleanup
-docker container prune -f
-docker image prune -af
-docker volume prune -f
-sudo apt-get clean
-sudo rm -rf /var/lib/apt/lists/*
-rm -rf /tmp/*
-
-# Laravel logs
-docker-compose exec app bash -c "echo '' > storage/logs/laravel.log"
-```
-
-## 📁 Estrutura do Projeto
-
-```
-├── app/
-│   ├── Console/Commands/     # Comandos Artisan
-│   ├── Http/Controllers/     # Controllers REST
-│   ├── Jobs/                 # Background jobs
-│   ├── Models/               # Eloquent models
-│   ├── Notifications/        # Notifications
-│   └── Services/             # Business logic
-├── resources/
-│   ├── js/
-│   │   ├── components/       # React components
-│   │   ├── pages/           # Inertia pages
-│   │   ├── hooks/           # Custom hooks
-│   │   └── layouts/         # Layout components
-│   └── views/               # Blade templates
-├── routes/
-│   ├── web.php              # Web routes
-│   └── console.php          # Scheduled tasks
-├── docker/                  # Docker configs
-├── .github/workflows/       # GitHub Actions
-└── docs/                    # Documentation
-```
-
-## 📄 Licença
-
-Este projeto é privado e proprietário.
-
-## 👥 Contribuição
-
-Para contribuir:
+Contribuições são bem-vindas! Por favor, leia nosso [guia de contribuição](CONTRIBUTING.md) antes de submeter PRs.
 
 1. Fork o projeto
-2. Crie uma branch (`git checkout -b feature/AmazingFeature`)
+2. Crie sua feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
 4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
-## 📞 Suporte
+---
 
-Para suporte, entre em contato através dos issues do GitHub ou pelo Discord configurado no projeto.
+## 📝 Licença
+
+Este projeto é proprietário e confidencial. Todos os direitos reservados.
 
 ---
 
-**🏥 Sistema desenvolvido para modernizar a gestão de clínicas médicas com tecnologia de ponta.**
+## 📞 Suporte
+
+- 📧 Email: suporte@managerclin.com.br
+- 💬 Discord: [Servidor da Comunidade](#)
+- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/managerclin/issues)
+
+---
+
+<div align="center">
+
+**Desenvolvido com ❤️ para modernizar a gestão de clínicas médicas**
+
+[![GitHub stars](https://img.shields.io/github/stars/yourusername/managerclin?style=social)](https://github.com/yourusername/managerclin)
+[![GitHub forks](https://img.shields.io/github/forks/yourusername/managerclin?style=social)](https://github.com/yourusername/managerclin/fork)
+
+</div>
