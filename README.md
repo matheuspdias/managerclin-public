@@ -23,8 +23,6 @@
 ### 📅 **Agendamento Inteligente**
 Sistema completo de agendamento com calendário interativo, gestão de salas, serviços e profissionais.
 
-![Agenda](public/images/agenda.png)
-
 ![Agendamentos](public/images/agendamentos.png)
 
 ---
