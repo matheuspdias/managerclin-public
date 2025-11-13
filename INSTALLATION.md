@@ -303,12 +303,29 @@ sudo certbot renew --dry-run
 
 ## 📱 Configuração do WhatsApp
 
-### 1. Evolution API
+### 1. Instalar Evolution API (Self-hosted)
 
-Você precisa de uma instância do Evolution API rodando. Opções:
+Para usar as notificações automáticas via WhatsApp, você precisa rodar o **Evolution API**.
 
-- Self-hosted: https://github.com/EvolutionAPI/evolution-api
-- Cloud: Contratar um provedor
+#### Desenvolvimento Local
+
+```bash
+# Em outra pasta, clone o repositório do Evolution API
+git clone https://github.com/matheuspdias/evolution-api.git
+cd evolution-api
+
+# Inicie com Docker (siga as instruções do README)
+docker-compose up -d
+```
+
+O Evolution API estará disponível em `http://localhost:8080` (ou a porta configurada).
+
+📖 **Siga as instruções completas no README do Evolution API**: https://github.com/matheuspdias/evolution-api
+
+#### Alternativas
+
+- **Self-hosted oficial**: https://github.com/EvolutionAPI/evolution-api
+- **Cloud**: Contratar um provedor de Evolution API
 
 ### 2. Configurar no ManagerClin
 

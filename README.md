@@ -165,6 +165,21 @@ docker-compose exec app php artisan migrate --seed
 composer dev
 ```
 
+### 📱 Integração WhatsApp (Opcional)
+
+Para usar as notificações automáticas via WhatsApp, você precisa rodar o **Evolution API**:
+
+```bash
+# Clone o repositório do Evolution API
+git clone https://github.com/matheuspdias/evolution-api.git
+cd evolution-api
+
+# Siga as instruções do README para iniciar com Docker
+docker-compose up -d
+```
+
+Após iniciar o Evolution API, configure as credenciais no ManagerClin em **Configurações → Integrações → WhatsApp**.
+
 📖 **Para instruções detalhadas, consulte o [Guia de Instalação](INSTALLATION.md)**
 
 ---
